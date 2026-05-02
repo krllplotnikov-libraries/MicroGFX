@@ -1,8 +1,5 @@
 #include "MicroGFX.h"
 
-extern const uint16_t font6x8[];
-extern const uint16_t font11x18[];
-
 extern Font_st font6X8;
 extern Font_st font11X18;
 
@@ -69,12 +66,7 @@ void MicroGFX_DrawString(MicroGFX_st* gfx, uint16_t x, uint16_t y, char* str, ui
 }
 
 Font_st* MicroGFX_GetFontByType(MicroGFX_st* gfx, Font_et fontType){
-	if(fontType == FONT_6X8){
-		return &font6X8;
-	}
-	else if(fontType == FONT_11X18){
-		return &font11X18;
-	}
+	return Font_GetFontByType(fontType);
 }
 
 static uint8_t IsLatinChar(char c){

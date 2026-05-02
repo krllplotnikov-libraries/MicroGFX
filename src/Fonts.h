@@ -15,4 +15,6 @@ typedef struct{
 	const uint16_t *data;
 }Font_st;
 
+Font_st* Font_GetFontByType(Font_et fontType);
+
 #endif
