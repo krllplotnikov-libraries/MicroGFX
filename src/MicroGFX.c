@@ -17,6 +17,7 @@ static void MicroGFX_DrawCircleHelper(MicroGFX_st* gfx, uint16_t x0, uint16_t y0
 
 void MicroGFX_Init(MicroGFX_st* gfx, MicroGFX_Descriptor_st* descriptor){
 	gfx->descriptor.setPixel = descriptor->setPixel;
+	gfx->descriptor.setPixelArray = descriptor->setPixelArray;
 	gfx->descriptor.height = descriptor->height;
 	gfx->descriptor.width = descriptor->width;
 }
@@ -28,9 +29,7 @@ void MicroGFX_DrawLine(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t x1, 
 	    	x0 = x1;
 	    	x1 = tx;
 		}
-		for(uint16_t i = x0; i < x1; i++){
-			gfx->descriptor.setPixel(gfx, i, y0, color);
-		}
+	    gfx->descriptor.setPixelArray(gfx, x0, y0, x1 - x0 + 1, 1, color);
 	}
 	else if(x0 == x1){
 	    if (y0 > y1){
@@ -38,9 +37,7 @@ void MicroGFX_DrawLine(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t x1, 
 	    	y0 = y1;
 	    	y1 = ty;
 		}
-		for(uint16_t i = y0; i < y1; i++){
-			gfx->descriptor.setPixel(gfx, x0, i, color);
-		}
+	    gfx->descriptor.setPixelArray(gfx, x0, y0, 1, y1 - y0 + 1, color);
 	}
 
 	else{
@@ -49,10 +46,10 @@ void MicroGFX_DrawLine(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t x1, 
 }
 
 void MicroGFX_DrawRect(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t width, uint16_t height, uint16_t color){
-	MicroGFX_DrawLine(gfx, x0, y0, x0 + width, y0, color);
-	MicroGFX_DrawLine(gfx, x0 + width, y0, x0 + width, y0 + height, color);
-	MicroGFX_DrawLine(gfx, x0 + width, y0 + height, x0, y0 + height, color);
-	MicroGFX_DrawLine(gfx, x0, y0 + height, x0, y0, color);
+	MicroGFX_DrawLine(gfx, x0, y0, x0 + width - 1, y0, color);
+	MicroGFX_DrawLine(gfx, x0 + width - 1, y0, x0 + width - 1, y0 + height - 1, color);
+	MicroGFX_DrawLine(gfx, x0 + width - 1, y0 + height - 1, x0, y0 + height - 1, color);
+	MicroGFX_DrawLine(gfx, x0, y0 + height - 1, x0, y0, color);
 }
 
 void MicroGFX_DrawCircle(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t radius, uint16_t color){
@@ -103,6 +100,10 @@ void MicroGFX_DrawRoundRect(MicroGFX_st* gfx, uint16_t x, uint16_t y, uint16_t w
 	MicroGFX_DrawCircleHelper(gfx, x + width - cornerRadius - 1, y + cornerRadius, cornerRadius, 2, color);
 	MicroGFX_DrawCircleHelper(gfx, x + width - cornerRadius - 1, y + height - cornerRadius - 1, cornerRadius, 4, color);
 	MicroGFX_DrawCircleHelper(gfx, x + cornerRadius, y + height - cornerRadius - 1, cornerRadius, 8, color);
+}
+
+void MicroGFX_FillScreen(MicroGFX_st* gfx, uint16_t color){
+	gfx->descriptor.setPixelArray(gfx, 0, 0, gfx->descriptor.width, gfx->descriptor.height, color);
 }
 
 void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_t color, Font_st* font){
