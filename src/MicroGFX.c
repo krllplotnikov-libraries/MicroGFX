@@ -1,8 +1,5 @@
 #include "MicroGFX.h"
 
-extern Font_st font6X8;
-extern Font_st font11X18;
-
 #define CYRILIC_BYTE              0xD0
 
 #define CYRILIC_OFFSET_ASCII      0x90
