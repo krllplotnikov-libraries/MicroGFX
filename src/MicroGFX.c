@@ -26,7 +26,7 @@ void MicroGFX_DrawLine(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t x1, 
 	    	x0 = x1;
 	    	x1 = tx;
 		}
-	    gfx->descriptor.setPixelArray(gfx, x0, y0, x1 - x0 + 1, 1, color);
+	    gfx->descriptor.setPixelArray(gfx, x0, y0, x1 - x0 + 1, 1, &color, 1);
 	}
 	else if(x0 == x1){
 	    if (y0 > y1){
@@ -34,7 +34,7 @@ void MicroGFX_DrawLine(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t x1, 
 	    	y0 = y1;
 	    	y1 = ty;
 		}
-	    gfx->descriptor.setPixelArray(gfx, x0, y0, 1, y1 - y0 + 1, color);
+	    gfx->descriptor.setPixelArray(gfx, x0, y0, 1, y1 - y0 + 1, &color, 1);
 	}
 
 	else{
@@ -100,7 +100,11 @@ void MicroGFX_DrawRoundRect(MicroGFX_st* gfx, uint16_t x, uint16_t y, uint16_t w
 }
 
 void MicroGFX_FillScreen(MicroGFX_st* gfx, uint16_t color){
-	gfx->descriptor.setPixelArray(gfx, 0, 0, gfx->descriptor.width, gfx->descriptor.height, color);
+	gfx->descriptor.setPixelArray(gfx, 0, 0, gfx->descriptor.width, gfx->descriptor.height, &color, 1);
+}
+
+void MicroGFX_DrawBitmap(MicroGFX_st* gfx, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t* bitmap){
+	gfx->descriptor.setPixelArray(gfx, x, y, w, h, bitmap, 0);
 }
 
 void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_t color, Font_st* font){
