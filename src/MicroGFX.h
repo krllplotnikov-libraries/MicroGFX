@@ -7,6 +7,7 @@
 #include "math.h"
 
 #include "Fonts.h"
+#include "Colors.h"
 
 typedef struct MicroGFX            MicroGFX_st;
 typedef struct MicroGFX_Descriptor MicroGFX_Descriptor_st;
