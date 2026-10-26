@@ -107,9 +107,11 @@ void MicroGFX_DrawBitmap(MicroGFX_st* gfx, uint16_t x, uint16_t y, uint16_t w, u
 	gfx->descriptor.setPixelArray(gfx, x, y, w, h, bitmap, 0);
 }
 
-void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_t color, Font_st* font){
+void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_t color, Font_et font){
 	uint16_t tx = x;
 	uint16_t ty = y;
+
+	Font_st* f = Font_GetFontByType(font);
 
 	uint8_t fontTableOffset = 0;
 
@@ -120,9 +122,9 @@ void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_
 		fontTableOffset = CYRILIC_OFFSET_ASCII - CYRILIC_OFFSET_FONT_TABLE;
 	}
 
-	for(uint8_t i = 0; i < font->height; i++){
-		for(uint8_t j = 0; j < font->width; j++){
-			if((font->data[(c - fontTableOffset) * font->height + i] << j) & 0x8000){
+	for(uint8_t i = 0; i < f->height; i++){
+		for(uint8_t j = 0; j < f->width; j++){
+			if((f->data[(c - fontTableOffset) * f->height + i] << j) & 0x8000){
 				gfx->descriptor.setPixel(gfx, tx, ty, color);
 			}
 			tx++;
@@ -132,8 +134,10 @@ void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_
 	}
 }
 
-void MicroGFX_DrawString(MicroGFX_st* gfx, uint16_t x, uint16_t y, char* str, uint16_t color, Font_st* font){
+void MicroGFX_DrawString(MicroGFX_st* gfx, uint16_t x, uint16_t y, char* str, uint16_t color, Font_et font){
 	uint16_t tx = x;
+
+	Font_st* f = Font_GetFontByType(font);
 
 	do{
 		if(*str == CYRILIC_BYTE){
@@ -142,7 +146,7 @@ void MicroGFX_DrawString(MicroGFX_st* gfx, uint16_t x, uint16_t y, char* str, ui
 
 		MicroGFX_DrawChar(gfx, tx, y, *str, color, font);
 
-		tx += font->width;
+		tx += f->width;
 	}while(*(++str));
 }
 
