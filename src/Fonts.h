@@ -3,6 +3,9 @@
 
 #include "stdint.h"
 
+#define CYRILIC_OFFSET_FONT_TABLE   96
+#define LATIN_OFFSET_FONT_TABLE     32
+
 typedef enum{
 	FONT_6X8,
 	FONT_7X9,

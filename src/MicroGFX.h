@@ -39,6 +39,4 @@ void MicroGFX_DrawBitmap(MicroGFX_st* gfx, uint16_t x, uint16_t y, uint16_t w, u
 void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_t color, Font_et font);
 void MicroGFX_DrawString(MicroGFX_st* gfx, uint16_t x, uint16_t y, char* str, uint16_t color, Font_et font);
 
-Font_st* MicroGFX_GetFontByType(MicroGFX_st* gfx, Font_et fontType);
-
 #endif

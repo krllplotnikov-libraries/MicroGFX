@@ -1,14 +1,5 @@
 #include "MicroGFX.h"
 
-#define CYRILIC_BYTE              0xD0
-
-#define CYRILIC_OFFSET_ASCII      0x90
-
-#define CYRILIC_OFFSET_FONT_TABLE 96
-#define LATIN_OFFSET_FONT_TABLE   32
-
-static uint8_t IsLatinChar(char c);
-
 static void MicroGFX_DrawLine_Slow(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color);
 static void MicroGFX_DrawCircleHelper(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t radius, int8_t quadrantMask, uint16_t color);
 
@@ -107,24 +98,21 @@ void MicroGFX_DrawBitmap(MicroGFX_st* gfx, uint16_t x, uint16_t y, uint16_t w, u
 	gfx->descriptor.setPixelArray(gfx, x, y, w, h, bitmap, 0);
 }
 
+
 void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_t color, Font_et font){
 	uint16_t tx = x;
 	uint16_t ty = y;
 
 	Font_st* f = Font_GetFontByType(font);
 
-	uint8_t fontTableOffset = 0;
-
-	if(IsLatinChar(c)){
-		fontTableOffset = LATIN_OFFSET_FONT_TABLE;
-	}
-	else{
-		fontTableOffset = CYRILIC_OFFSET_ASCII - CYRILIC_OFFSET_FONT_TABLE;
+	uint8_t offset = 32;
+	if(c > 127){
+		offset = 96;
 	}
 
 	for(uint8_t i = 0; i < f->height; i++){
 		for(uint8_t j = 0; j < f->width; j++){
-			if((f->data[(c - fontTableOffset) * f->height + i] << j) & 0x8000){
+			if((f->data[(c - offset) * f->height + i] << j) & 0x8000){
 				gfx->descriptor.setPixel(gfx, tx, ty, color);
 			}
 			tx++;
@@ -139,28 +127,15 @@ void MicroGFX_DrawString(MicroGFX_st* gfx, uint16_t x, uint16_t y, char* str, ui
 
 	Font_st* f = Font_GetFontByType(font);
 
-	do{
-		if(*str == CYRILIC_BYTE){
-			continue;
-		}
-
+	for(; *str; str++){
 		MicroGFX_DrawChar(gfx, tx, y, *str, color, font);
-
 		tx += f->width;
-	}while(*(++str));
-}
-
-Font_st* MicroGFX_GetFontByType(MicroGFX_st* gfx, Font_et fontType){
-	return Font_GetFontByType(fontType);
-}
-
-static uint8_t IsLatinChar(char c){
-	if(c < 0x7F){
-		return 1;
 	}
-	return 0;
 }
 
+
+
+//-----Private Function Definitions-----
 static void MicroGFX_DrawLine_Slow(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color) {
 	uint16_t deltaX = abs(x1 - x0);
 	uint16_t deltaY = abs(y1 - y0);
