@@ -105,9 +105,9 @@ void MicroGFX_DrawChar(MicroGFX_st* gfx, uint16_t x, uint16_t y, char c, uint16_
 
 	Font_st* f = Font_GetFontByType(font);
 
-	uint8_t offset = 32;
-	if(c > 127){
-		offset = 96;
+	uint8_t offset = PRINTABLE_CHARACTERS_OFFSET_FONT_TABLE;
+	if(c > LAST_PRINTABLE_CHARACTER){
+		offset = PRINTABLE_CHARACTERS_OFFSET_FONT_TABLE_EXT_1;
 	}
 
 	for(uint8_t i = 0; i < f->height; i++){

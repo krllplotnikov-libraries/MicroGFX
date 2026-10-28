@@ -3,8 +3,11 @@
 
 #include "stdint.h"
 
-#define CYRILIC_OFFSET_FONT_TABLE   96
-#define LATIN_OFFSET_FONT_TABLE     32
+#define PRINTABLE_CHARACTERS_OFFSET_FONT_TABLE         32
+#define PRINTABLE_CHARACTERS_OFFSET_FONT_TABLE_EXT_1   88
+
+#define LAST_PRINTABLE_CHARACTER                       127
+#define LAST_PRINTABLE_CHARACTER_EXT_1                 255
 
 typedef enum{
 	FONT_6X8,
