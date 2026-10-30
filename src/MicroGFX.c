@@ -40,6 +40,10 @@ void MicroGFX_DrawRect(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t widt
 	MicroGFX_DrawLine(gfx, x0, y0 + height - 1, x0, y0, color);
 }
 
+void MicroGFX_DrawRectFill(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t width, uint16_t height, uint16_t color){
+	gfx->descriptor.setPixelArray(gfx, x0, y0, width, height, &color, 1);
+}
+
 void MicroGFX_DrawCircle(MicroGFX_st* gfx, uint16_t x0, uint16_t y0, uint16_t radius, uint16_t color){
 	int x = 0;
 	int y = radius;
